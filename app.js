@@ -39,6 +39,8 @@ app.use(express.json())
 
 app.use('/api', web)
 //server start
+const PORT = process.env.PORT || 2000;
+
 app.listen(process.env.PORT, () => {
     console.log(`server start localhost:${process.env.PORT}`)
 })
