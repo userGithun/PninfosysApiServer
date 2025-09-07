@@ -8,20 +8,9 @@ const cors = require('cors')
 const env = require('dotenv')
 env.config()
 
-const allowedOrigins = [
-    "http://localhost:3000",
-    "https://pninfosys-frontend-evmb.vercel.app",
-    "https://pninfosys-frontend-evmb-gmip90db0.vercel.app" // preview builds ke liye
-]
-
+//cors
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true)
-        } else {
-            callback(new Error("Not allowed by CORS"))
-        }
-    },
+    origin: process.env.ORIGIN,
     credentials: true
 }))
 //cookiee
@@ -39,8 +28,6 @@ app.use(express.json())
 
 app.use('/api', web)
 //server start
-const PORT = process.env.PORT || 2000;
-
 app.listen(process.env.PORT, () => {
     console.log(`server start localhost:${process.env.PORT}`)
 })
