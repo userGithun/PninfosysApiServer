@@ -10,9 +10,9 @@ env.config()
 
 //cors
 app.use(cors({
-    origin: process.env.ORIGIN,
+    origin: [process.env.ORIGIN, "http://localhost:3000"],
     credentials: true
-}))
+}));
 //cookiee
 app.use(cookieparser())
 
