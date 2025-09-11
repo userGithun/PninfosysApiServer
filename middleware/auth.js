@@ -1,23 +1,34 @@
 const jwt = require('jsonwebtoken')
 const userModel = require('../model/users');
 
-
 const checkAuth = async (req, res, next) => {
-    const { token } = req.cookies;
-    console.log("Auth Token",token)
-    // console.log("Cookie token:",token);
+    // 1. Check cookie first
+    let token = req.cookies?.token;
+
+    // 2. If not in cookies, check Authorization header
+    if (!token && req.headers.authorization) {
+        const authHeader = req.headers.authorization; // "Bearer <token>"
+        token = authHeader.split(' ')[1];
+    }
+
     if (!token) {
         return res.status(401).json({
             success: false,
             message: "unauthorised user Please Login !"
         })
-    } else {
-        const verifyToken = jwt.verify(token, process.env.SECRETKEY)
-        // console.log("Verified Token:",verifyToken);
-        const userdata = await userModel.findOne({ _id: verifyToken.ID });
+    }
 
+    try {
+        const verifyToken = jwt.verify(token, process.env.SECRETKEY)
+        const userdata = await userModel.findOne({ _id: verifyToken.ID }); // ya verifyToken.id if server expects lowercase
+        if (!userdata) {
+            return res.status(401).json({ success: false, message: "User not found!" });
+        }
         req.udata = userdata;
         next();
+    } catch (err) {
+        return res.status(401).json({ success: false, message: "Token is invalid or expired!" });
     }
 }
-module.exports = checkAuth
+
+module.exports = checkAuth;
