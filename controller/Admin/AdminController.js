@@ -1,7 +1,8 @@
 const userModel = require('../../model/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const env = require('dotenv')
+env.config()
 
 
 class AdminController {
@@ -79,8 +80,16 @@ class AdminController {
             // Generate JWT token
             const token = jwt.sign({ ID: user._id }, process.env.SECRETKEY);
 
-            res.cookie("token", token);
-            // console.log("Generated token:",token);
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                domain: process.env.NODE_ENV === 'production' ? '.pninfosys.com' : 'localhost',
+                maxAge: 24 * 60 * 60 * 1000
+            });
+
+            console.log("Generated token:", token);
+            // console.log("LOGIN Token", token)
 
             return res.status(200).json({
                 success: true,
@@ -88,6 +97,7 @@ class AdminController {
                 token,
                 user,
             });
+
         } catch (error) {
             console.error(error)
         }
@@ -95,8 +105,9 @@ class AdminController {
     // GET /api/admin/dashboard (Protected)
     static async dashboard(req, res) {
         res.status(200).json({
-            message: 'Welcome to Admin Dashboard ✅'
+            user: req.udata,     // Send back user data
         });
+        console.log("dashboard user", user)
     }
     static getUsers = async (req, res) => {
         try {
