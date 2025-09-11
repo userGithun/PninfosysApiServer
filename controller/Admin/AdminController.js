@@ -2,6 +2,7 @@ const userModel = require('../../model/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const env = require('dotenv')
+const courseBookModel = require('../../model/courseBooking')
 env.config()
 
 
@@ -103,11 +104,12 @@ class AdminController {
         }
     };
     // GET /api/admin/dashboard (Protected)
-    static async dashboard(req, res) {
+    static dashboard = async (req, res) => {
+        const totalEnroll = await courseBookModel.countDocuments()
         res.status(200).json({
-            user: req.udata,     // Send back user data
+            user: req.udata,
+            totalEnroll    // Send back user data
         });
-        console.log("dashboard user", user)
     }
     static getUsers = async (req, res) => {
         try {
