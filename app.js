@@ -28,7 +28,7 @@ app.use(express.json())
 
 //
 app.get("/", (req, res) => {
-  res.send("Backend API running 🚀");
+  res.send("Backend API running");
 });
 
 app.use('/api', web)
