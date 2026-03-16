@@ -26,6 +26,10 @@ connectdb()
 //datatype json
 app.use(express.json())
 
+//
+app.get("/", (req, res) => {
+  res.send("Backend API running 🚀");
+});
 
 app.use('/api', web)
 //server start
