@@ -1,6 +1,6 @@
-const courseModel = require("../../model/course")
+// const courseModel = require("../../model/course")
 const courseBookModel = require("../../model/courseBooking")
-const sendCourseMail = require('../../utils/sendMail')
+// const sendCourseMail = require('../../utils/sendMail')
 
 class CourseBookController {
     static CourseBookingInsert = async (req, res) => {
@@ -18,10 +18,10 @@ class CourseBookController {
                 semester,
                 courseId
             })
-            const courseid = await courseModel.findById(courseId)
+            // const courseid = await courseModel.findById(courseId)
             // console.log('insert 1st id=', courseid)
-            const courseName = courseid?.title || "Selected course";
-            await sendCourseMail(email, name, courseName)
+            // const courseName = courseid?.title || "Selected course";
+            // await sendCourseMail(email, name, courseName)
             return res.status(201).json(course)
 
         } catch (error) {
