@@ -10,7 +10,9 @@ env.config()
 
 //cors
 app.use(cors({
-    origin: [process.env.ORIGIN, "http://localhost:3000"],
+    origin: [process.env.ORIGIN,
+        process.env.VERCEL_ORIGIN,
+        "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
